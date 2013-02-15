@@ -1,10 +1,8 @@
 \documentclass[10pt,a4paper]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[turkish]{babel}
-\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{verbatim}
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{bookmark}
@@ -56,6 +54,7 @@ Bu belge Scala programlama dili ve derleyicisi(compiler) hakkında kısa bir bil
 \end{chapter}
 
 \begin{chapter}{İlk Örnek}
+
 İlk örnek olarak, standart \textit{Hello world} programını kullanacağız. Çok etkileyici olmasa da Scala hakkında pek bir şey bilmeden dilin araçlarının kullanımını göstermesi açısından basit bir örnektir:
 
 \begin{verbatim}
@@ -68,28 +67,32 @@ Bu belge Scala programlama dili ve derleyicisi(compiler) hakkında kısa bir bil
 
 Bu programın yapısı Java programcılarına tanıdık gelmiş olması lazım: parametre olarak komut satırı argümanları, bir dizgi(string) dizisi alan bir \texttt{main} metodu içeriyor, ve bu metodun gövdesi de dostça bir selamlama argümanı içeren öntanımlı \texttt{println} metodundan oluşuyor. \texttt{main} metodu herhangi bir değer geri döndürmez(çünkü bir işlem metodudur), bu yüzden herhangi bir geri dönüş türü bildirmeye gerek yoktur.
 
-Java programcılarına daha az tanıdık gelen kısım ise \texttt{main} metodunu içeren \textbf{obje}nin bildirimidir. Bu tarz bir bildirim bizi, daha çok bilinen adıyla, \textit{tek elemanlı obje}'yle tanıştırır, yani tek örnekli sınıf(class)'la. Yukarıdaki bildirim hem \texttt{HelloWorld} adlı sınıfı hem de bu sınıfın yine \texttt{HelloWorld} adlı örneğini bildirir. \begin{comment} hocam bu kısmı anlayamadım -> \end{comment} This instance is created on demand, the first time it is used. 
+Java programcılarına daha az tanıdık gelen kısım ise \texttt{main} metodunu içeren \textbf{obje}nin bildirimidir. Bu tarz bir bildirim bizi, daha çok bilinen adıyla, \textit{tek elemanlı obje}'yle tanıştırır, yani tek örnekli sınıf(class)'la. Yukarıdaki bildirim hem \texttt{HelloWorld} adlı sınıfı hem de bu sınıfın yine \texttt{HelloWorld} adlı örneğini bildirir. This instance is created on demand, the first time it is used. 
 
 Dikkatli bir okuyucu \texttt{main} metodunun \texttt{static} olarak bildirilmediğini farketmiş olabilir. Bunun nedeni statik elemanlar(metodlar veya alanlar)ın Scala'da bulunmamasındandır. Scala programcısı statik elemanları tanımlamak yerine, bu elemanları tek elemanlı objelerde bildirir.
 
-\begin{section}{Örneği Derlemek}
+\begin{section}{Örneği derlemek}
 
 Örneği derlemek için \texttt{scalac}'ı, yani Scala derleyicisini(compiler) kullanılır. \texttt{scalac} çoğu derleyiciye benzer şekilde çalışır: bir kaynak dosyasını argüman olarak alır ve bir veya birkaç tane obje dosyası oluşturur. Oluşturduğu obje dosyaları standart Java sınıf dosyalarıdır.
-Eğer yukarıdaki programı bir dosyaya \texttt{HelloWorld.scala} adıyla kaydedersek, onu şu komutla derleyebiliriz(büyük-eşit '>' işareti shell \begin{comment} kabuk yazayım mı? \end{comment} bilgi istemini temsil eder ve yazılmamalıdır):
+Eğer yukarıdaki programı bir dosyaya \texttt{HelloWorld.scala} adıyla kaydedersek, onu şu komutla derleyebiliriz(büyük-eşit '$>$' işareti kabuk bilgi istemini temsil eder ve yazılmamalıdır):
 
-> \texttt{scalac HelloWorld.scala}
+\begin{verbatim}
+> scalac HelloWorld.scala
+\end{verbatim}
 
 Bu, mevcut dizinde(directory) birkaç sınıf dosyası oluşturur. Bir tanesi \texttt{HelloWorld.\textbf{class}} diye adlandırılır ve, bir sonraki kısımda göreceğimiz üzere, \texttt{scala} komutuyla direkt olarak yürütülebilen(execute) bir sınıf içerir.
 
 \end{section}
 
-\begin{section}{Örneği Çalıştırmak}
+\begin{section}{Örneği çalıştırmak}
 
 Bir Scala programı, bir kere derlendiği zaman \texttt{scala} komutuyla çalışıtırılabilir. Kullanımı Java programlarını çalıştırmak için kullanılan \texttt{java} komutuna çok benzer ve aynı seçenekleri kabul eder. Yukarıdaki örnek şu komutla yürütülebilir ve beklenen çıktıyı verir:
 
-> \texttt{scala -classpath . HelloWorld}
+\begin{verbatim}
+> scala -classpath . HelloWorld
 
-\texttt{Hello, world!}
+Hello, world!
+\end{verbatim}
 
 \end{section}
 
@@ -97,20 +100,126 @@ Bir Scala programı, bir kere derlendiği zaman \texttt{scala} komutuyla çalı�
 
 \begin{chapter}{Java'yla Etkileşimi}
 
+Scala'nın güçlü yönlerinden biri de Java'yla etkileşiminin oldukça kolay olmasıdır. \texttt{java.lang} paketindeki bütün sınıflar default olarak içeri aktarılmıştır(import), fakat diğer paketlerin doğrudan içeri aktarılması gerekmektedir.
 
+Şimdi bunu açıklayan bir örneğe bakalım: Örneğin belirlediğimiz bir ülkedeki, Fransa diyelim, şu andaki tarihine edinmek ve biçimlendirmek istiyoruz.
 
+Java'nın sınıf kitaplıkları \texttt{Date} ve \texttt{DateFormat} gibi oldukça güçlü yardımcı sınıflar tanımlar. Scala Java'yla sorunsuz bir şekilde birlikte çalıştığı için, eşdeğer sınıfları Scala'nın sınıf kitaplığında uygulamamız gerekmez. (basitçe Java paketlerinden karşılık gelen sınıfı içeri aktarabiliriz.)
+
+\begin{verbatim}
+\textbf{import} java.util.{Date, Locale}
+\textbf{import} java.text.DateFormat
+\textbf{import} java.text.DateFormat._
+
+\textbf{object} FrenchDate {
+	\textbf{def} main(args: Array[String]){
+		\textbf{val} now = \textbf{new} Date
+		\textbf{val} df = getDateInstance(LONG, Locale.FRANCE)
+		println(df format now)
+	}
+}
+\end{verbatim}
+
+Scala'nın içeri aktarma ifadesi Java'nınkine oldukça benzerdir, fakat daha güçlüdür. Yukarıdaki kodun ilk satırında görüldüğü üzere; sınıflar toplu bir şekilde, aynı paketten süslü parantez içine alınarak içeri aktarılabilir. Bir başka fark da, bir paketin veya sınıfın bütün elemanlarını içeri aktarırken yıldız($*$) yerine alt tire($_$) kullanılmasıdır. Bunun nedeni yıldız işaretinin Scala'da geçerli bir kimlik tanıtıcı(örn. metod adı) olmasıdır. Buna daha sonra değineceğiz.
+
+Yukarıdaki sebepten dolayı üçüncü satırdaki import ifadesi \texttt{DateFormat} sınıfındaki bütün elemanları içeri aktarır. Bu da statik bir metod olan \texttt{getDateInstance} ve statik alan \texttt{LONG}'u direkt olarak görünür hale getirir.
+
+\texttt{main} metodunun içinde ilk olarak mevcut tarihi içeren, Java'nın \texttt{Date} sınıfının  bir örneğini yarattık. Daha sonra, önceden içeri aktardığımız statik \texttt{getDateInstance} metoduyla bir tarih formatı tanımladık. Son olarak da, yerini belirlediğimiz \texttt{DateFormat} örneğiyle mevcut tarihi yazdırdık. Son satır bize Scala'nın sözdiziminin(syntax) ilginç bir özelliğini gösteriyor; tek argüman içeren metodlar iç ekli sözdizimiyle birlikte kullanılabilir. Şu şekilde gösterim;
+
+\begin{verbatim}
+df format now
+\end{verbatim}
+
+aşağıdaki gösterimin daha az ayrıntılı ve basitleştirilmiş gösterimidir:
+
+\begin{verbatim}
+df.format(now)
+\end{verbatim}
+
+Bu küçük bir sözdizimsel ayrıntı gibi gözükebilir, fakat önemli neticeleri vardır. Bunları bir sonraki kısımda göreceğiz.
+
+Scala'nın Java'yla etkileşimi hakkındaki bu kısmı özetlemek gerekirse; Java sınıfları ve Java arayüzleri Scala'da direkt olarak devralınabilir.
 \end{chapter}
 
-\begin{chapter}{Everything is an object}
+\begin{chapter}{Her şey bir obje}
 
-\begin{section}{Numbers are objects}
+Scala saf bir nesneye dahalı programlama dilidir; yani ,sayılar ve fonksiyonlar da dahil, \textit{her şey} bir objedir. Bu bağlamda Java'dan farklılık gösterir, çünkü Java ilkel(primitive) türleri(\texttt{boolean} ve \texttt{int} gibi) referans türlerden ayırır ve fonksiyonların değer olarak kullanılmasına müsade etmez.
+
+\begin{section}{Obje olarak numaralar}
+
+Numaralar da obje oldukları için, onların da metodları vardır. Ve aslında, şu şekilde olan aritmetik gösterimler;
+
+\begin{verbatim}
+1 + 2 * 3 / x
+\end{verbatim}
+
+sadece metod çağrıları içerir, çünkü aşağıdaki gösterime eşdeğerdir:
+
+\begin{verbatim}
+(1).+(((2).*(3))./(x))
+\end{verbatim}
+
+Bu aynı zamanda +,*,vb. işaretlerin Scala'da geçerli belirteçler olduğunu gösterir.
+
+İkinci versiyondaki numaraların etrafındaki parantezler gereklidir çünkü Scala'nın sözcük analizi token'lar için en uzun eşleşme kuralını kullanır. Bu yüzden aşağıdaki gösterimi
+
+\begin{verbatim}
+1.+(2)
+\end{verbatim}
+
+\texttt{1., +, 2} token'larına ayırır. Bu token'lara ayırma yönteminin seçilmesinin nedeni \texttt{1.}'in \texttt{1}'den daha uzun bir geçerli eşleşme olmasıdır. \texttt{1.} token'ına aslında \texttt{1.0} gibi davranılır, yani \texttt{Int} yerine \texttt{Double} kabul edilir.
+
+Şu şekilde yazmak;
+
+\begin{verbatim}
+(1).+(2)
+\end{verbatim}
+
+\texttt{1}'e \texttt{Double} gibi davranılmasını engeller.
 
 \end{section}
 
-\begin{section}{Functions are objects}
+\begin{section}{Obje olarak fonksiyonlar}
 
-\begin{subsection}{Anonymous functions}
+Muhtemelen Java programcısı için daha sürpriz edici olan, Scala'da fonksiyonların aynı zamanda birer obje olmasıdır. Bu yüzden fonksiyonları argüman olarak geçmek, değişkenler içinde saklayabilmek ve başka fonksiyonlardan geri döndürmek Scala'da mümkündür. Bu fonksiyonları değer olarak kullanabilme kabiliyeti, \textit{fonksiyonel programlama} adı verilen çok ilginç bir programlama tekniğinin temel taşıdır.
 
+Fonksiyonların değer olarak kullanılmasının neden bu kadar kullanışlı olduğuna çok basit bir örnek olarak, her saniye aynı eylemi gerçekleştirme amacı olan bir zamanlayıcı fonksiyonunu düşünelim. Bu eylemi nasıl uygulamaya geçirebiliriz? Mantıklı cevap, fonksiyon olarak. Bu çok basit fonksiyon geçişi pek çok programcıya tanıdık gelecektir: Bu sıkça kullanıcı arayüzü kodlarında, bir etkinlik olduğunda çağırılan geri çağırma fonksiyonlarını kaydetmek için kullanılır.
+
+Aşağıdaki programda, \texttt{oncePerSecond} adını verdiğimiz zamanlayıcı fonksiyon argüman olarak bir geri çağırma fonksiyonunu alıyor. Bu fonksiyonun türü; \texttt{() => Unit} olarak yazılır ve, hiç bir argüman almayan ve hiç bir şey döndürmeyen bütün fonksiyonların türüdür(\texttt{Unit türü C/C++'taki \texttt{void}'e benzer}. \texttt{main} fonksiyonu basitçe, bir cümle yazdıran zamanlayıcı fonksiyonu geri çağırmayla çağırır. Bir başka deyişle, bu program sonsuza kadar her saniye "time flies like an arrow" cümlesini yazdırır.
+
+\begin{verbatim}
+\textbf{object} Timer {
+	\textbf{def} oncePerSecond(callback: () => Unit) {
+		\textbf{while} (\textbf{true}) { callback(); Thread sleep 1000 }
+	}
+	\textbf{def} timeFlies() {
+		println("time flies like an arrow...")
+	}
+	def main(args: Array[String]) {
+		oncePerSecond(timeFlies)
+	}
+}
+\end{verbatim}
+
+Dizgiyi(string) yazdırmak için öntanımlı \texttt{println} metodunu başına \texttt{System.out.} yazmadan kullandık.
+
+\begin{subsection}{Anonim fonksiyonlar}
+
+Yukarıdaki program anlaşılması kolay olsa da biraz daha güzelleştirilebilir. İlk olarak, \texttt{timeFlies} metodunun sadece daha sonra \texttt{oncePerSecond} geçmek için tanımlandığı farkediliyor. Sadece bir defa kullanılacak bu fonksiyonu isimlendirmek çok da gerekli olmayabilir ve aslında \texttt{oncePerSecond}'a geçer geçmez bu fonksiyonu oluşturmak çok daha iyi olur. Bu, Scala'da \textit{anonim fonksiyonlar} ile mümkündür, yani bir ismi olmayan fonksiyonlar ile. Zamanlayıcı programımımızın \texttt{timeFlies} yerine anonim fonksiyon kullanılmış hali şunun gibidir:
+
+\begin{verbatim}
+\textbf{object} TimerAnonymous {
+	\textbf{def} oncePerSecond(callback: () => Unit) {
+		\textbf{while} (\textbf{true}) { callback(); Thread sleep 1000 }
+	}
+	def main(args: Array[String]) {
+		oncePerSecond(() =>
+			println("time flies like an arrow..."))
+	}
+}
+\end{verbatim}
+
+Bu örnekteki anonim fonksiyonun varlığı, fonksiyonun argüman listesini gövdesinden ayıran sağ ok'=>' ile ortaya çıkarılır. Okun sağında görüldüğü gibi bu örnekte argüman listesi boş, fonksiyonun gövdesi ise yukarıdaki \texttt{timeFlies} fonksiyonununkiyle aynı.
 \end{subsection}
 
 \end{section}
